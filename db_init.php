@@ -4,9 +4,13 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->exec("CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
+    firstname TEXT,
+    lastname TEXT,
+    number INTEGER,
     email TEXT UNIQUE,
     password TEXT,
-    dob TEXT
+    dob TEXT,
+    token TEXT
 )");
 $db->exec("CREATE TABLE IF NOT EXISTS debits (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

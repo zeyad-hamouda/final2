@@ -20,7 +20,10 @@
 		input[type="text"],
 		input[type="password"],
 		input[type="email"],
-		input[type="date"] {
+		input[type="date"],
+		input[type="firstname"],
+		input[type="lastname"],
+		input[type="number"] {
 			padding: 10px;
 			width: 100%;
 			border: none;
@@ -59,6 +62,30 @@
 			margin-bottom: 10px;
 		}
 
+		.login-link{
+			text-align: center;
+			margin-top: 20px;
+			font-size: 14px;
+			cursor: pointer;
+			color: blue;
+			text-decoration: underline;
+		}
+		.remember-link{
+			text-align: center;
+			margin-top: 20px;
+			font-size: 14px;
+			cursor: pointer;
+			color: blue;
+			text-decoration: underline;
+		}
+		.forgot-link {
+			text-align: center;
+			margin-top: 20px;
+			font-size: 14px;
+			cursor: pointer;
+			color: blue;
+			text-decoration: underline;
+		}
 		.register-link {
 			text-align: center;
 			margin-top: 20px;
@@ -69,6 +96,10 @@
 		}
 
 		#register-form {
+			display: none;
+		}
+		
+		#forgot-form{
 			display: none;
 		}
 
@@ -90,9 +121,16 @@
 		<?php unset($_SESSION["login-error"]); ?>
 	<?php endif; ?>
 	<p class="register-link" id="register-toggle">Don't have an account?</p>
+	<p class="forgot-link" id="forgot-toggle">Forgot password?</p>
 </form>
 
 <form id="register-form" method="post" action="register_handler.php">
+	<label>First Name:</label>
+	<input type = "text" name = "firstname" required>
+	<label>Last Name:</label>
+	<input type = "text" name = "lastname" required>
+	<label>Phone Number:</label>
+	<input type = "text" name = "number" required>
 	<label>Username:</label>
 	<input type="text" name="username" required>
 	<label>Email:</label>
@@ -108,24 +146,54 @@
 		<p class="error"><?php echo $_SESSION["register-error"]; ?></p>
 		<?php unset($_SESSION["register-error"]); ?>
 	<?php endif; ?>
+	<p class="login-link" id="login-toggle">Already have an account?</p>
 </form>
+
+<form id = "forgot-form" method="post" action="forgot_password_handler.php">
+  <label for="email">Email:</label>
+  <input type="email" name="email" required>
+  <input type="submit" value="Reset Password">
+  <p class="remember-link" id="remember-toggle">Remembered your password?</p>
+</form>
+
 
 <script>
 	var loginForm = document.getElementById("login-form");
 	var registerForm = document.getElementById("register-form");
 	var registerLink = document.getElementById("register-toggle");
+	var rememberLink = document.getElementById("remember-toggle");
+	var rememberForm = document.getElementById("remember-form");
+	var loginLink = document.getElementById("login-toggle");
+	var forgotForm = document.getElementById("forgot-form");
+	var forgotLink = document.getElementById("forgot-toggle");
 
+	loginLink.addEventListener("click", function() {
+		toggleForm("login");
+	});
 	registerLink.addEventListener("click", function() {
 		toggleForm("register");
+	});
+	forgotLink.addEventListener("click", function() {
+		toggleForm("forgot");
+	});
+	rememberLink.addEventListener("click", function() {
+		toggleForm("login");
 	});
 
 	function toggleForm(form) {
 		if (form == "login") {
 			loginForm.style.display = "block";
 			registerForm.style.display = "none";
+			forgotForm.style.display = "none";
 		} else if (form == "register") {
 			loginForm.style.display = "none";
 			registerForm.style.display = "block";
+			forgotForm.style.display = "none";
+		}
+		else if(form == "forgot") {
+			loginForm.style.display = "none";
+			registerForm.style.display = "none";
+			forgotForm.style.display = "block";
 		}
 	}
 </script>

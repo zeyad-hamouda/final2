@@ -44,6 +44,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+<style>
+		body {
+			font-family: Arial, sans-serif;
+		}
+
+		form {
+			background-color: #f2f2f2;
+			padding: 20px;
+			border-radius: 10px;
+			max-width: 500px;
+			margin: 0 auto;
+			display: block;
+		}
+
+		input[type="text"],
+		input[type="password"] {
+			padding: 10px;
+			width: 100%;
+			border: none;
+			border-radius: 5px;
+			margin-bottom: 10px;
+			box-sizing: border-box;
+			font-size: 16px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 10px;
+			font-size: 16px;
+			font-weight: bold;
+		}
+
+		input[type="submit"] {
+			background-color: #4CAF50;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+			margin-top: 10px;
+			width: 100%;
+			transition: background-color 0.3s ease;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+
+		.error {
+			color: red;
+			margin-bottom: 10px;
+		}
+
+		.active {
+			display: block;
+		}
+        h2{
+            text-align: center;
+        }
+	</style>
 <h2>Reset Password</h2>
 
 <form method="post" action="reset_password.php?token=<?php echo $token; ?>">

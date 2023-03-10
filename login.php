@@ -157,6 +157,7 @@
 </form>
 
 
+
 <script>
 	var loginForm = document.getElementById("login-form");
 	var registerForm = document.getElementById("register-form");

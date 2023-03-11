@@ -16,6 +16,37 @@ $user = $stmt->fetch();
 // Extract the first name from the username
 $first_name = explode(" ", $user["username"])[0];
 
+// Process the bill payment form submission
+if (isset($_POST["pay_bill"])) {
+	var_dump("pay bill is clicked");
+	// Retrieve the form data
+	$amount = $_POST["amount"];
+	$bill_type = $_POST["bill_type"];
+	// Validate the form data
+	$errors = [];
+	if (!is_numeric($amount) || $amount <= 0) {
+		$errors[] = "Please enter a valid amount.";
+	}
+
+	if (!in_array($bill_type, ["electricity", "water", "internet"])) {
+		$errors[] = "Please select a valid bill type.";
+	}
+
+	// If there are no errors, update the database with the bill payment details
+	if (empty($errors)) {
+		$stmt = $db->prepare("INSERT INTO bill_payments (user_id, amount, bill_type, date) VALUES (:user_id, :amount, :bill_type, :date)");
+		$stmt->bindValue(":user_id", $_SESSION["user_id"]);
+		$stmt->bindValue(":amount", $amount);
+		$stmt->bindValue(":bill_type", $bill_type);
+		$stmt->bindValue(":date", date("Y-m-d H:i:s"));
+		$stmt->execute();
+	
+		$message = "Thank you, $first_name! Your $bill_type bill payment of $$amount has been processed.";
+	} else {
+		$message = implode("<br>", $errors);
+	}
+}
+
 if (isset($_POST["add_family_member"])) {
     // Sanitize user input
 	$username = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
@@ -42,7 +73,7 @@ if (isset($_POST["add_family_member"])) {
 		$stmt->bindValue(":number", $number);
         $stmt->bindValue(":dob", $dob);
         $stmt->bindValue(":is_sub_user", $privilege == "sub_user" ? 1 : 0);
-        $stmt->bindValue(":parent_id", $parent_id);
+        $stmt->bindValue(":parent_id", $_SESSION["user_id"]);
         $stmt->execute();
         
         $success = "Family member added successfully";
@@ -303,6 +334,21 @@ foreach ($family_birthdays as $family_birthday) {
         		<option value="sub_user">Sub user</option>
     		</select>
     		<input type="submit" name="edit_family_member_submit" value="Edit">
+		</form>
+		<form method="post">
+			<label for="bill_type">Select Bill Type:</label>
+			<select id="bill_type" name="bill_type">
+				<option value="electricity">Electricity</option>
+				<option value="water">Water</option>
+				<option value="internet">Internet</option>
+			</select><br><br>
+			<label for="amount">Amount:</label>
+			<input type="number" id="amount" name="amount"><br><br>
+			<label for="due_date">Due Date:</label>
+			<input type="date" id="due_date" name="due_date"><br><br>
+			<label for="autopay">Autopay:</label>
+			<input type="checkbox" id="autopay" name="autopay"><br><br>
+			<input type="submit" name="pay_bill" value="Pay Bill">
 		</form>
 	</div>
 	<script>

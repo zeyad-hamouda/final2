@@ -26,4 +26,13 @@ $db->exec("CREATE TABLE IF NOT EXISTS debits (
     final_date TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id)
 )");
+$db->exec("CREATE TABLE IF NOT EXISTS bill_payments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    amount FLOAT,
+    bill_type TEXT,
+    date TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)");
 ?>
+

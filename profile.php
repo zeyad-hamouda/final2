@@ -177,6 +177,19 @@ foreach ($family_birthdays as $family_birthday) {
 			background-color: #555;
 			cursor: pointer;
 		}
+		.bills-link{
+		color: white;
+		text-decoration: none;
+		margin-top: 10px;
+		padding: 5px;
+		border-radius: 5px;
+		transition: background-color 0.3s ease;
+		}
+
+		.bills-link:hover{
+			background-color: #555;
+			cursor: pointer;
+		}
 
 		.add-link{
 		color: white;
@@ -239,6 +252,9 @@ foreach ($family_birthdays as $family_birthday) {
 		#show-form{
 			display: none;
 		}
+		#bills-form{
+			display: none;
+		}
 	</style>
 	</head>
 	<body>
@@ -246,6 +262,7 @@ foreach ($family_birthdays as $family_birthday) {
 		<h3>Welcome <?php echo $first_name; ?></h3>
 		<p class="add-link" id="add-toggle">Add Family Members</p>
 		<p class="show-link" id="show-toggle">Show Family Members</p>
+		<p class="bills-link" id="bills-toggle">Pay Bills</p>
 		<a href="logout.php">Logout</a>
 	</nav>
 	<div class="container">
@@ -335,7 +352,7 @@ foreach ($family_birthdays as $family_birthday) {
     		</select>
     		<input type="submit" name="edit_family_member_submit" value="Edit">
 		</form>
-		<form method="post">
+		<form method="post" id="bills-form">
 			<label for="bill_type">Select Bill Type:</label>
 			<select id="bill_type" name="bill_type">
 				<option value="electricity">Electricity</option>
@@ -356,6 +373,8 @@ foreach ($family_birthdays as $family_birthday) {
     const editIdInput = document.getElementById('edit-id');
 	var addForm = document.getElementById("add-form");
 	var addLink = document.getElementById("add-toggle");
+	var billsForm = document.getElementById("bills-form");
+	var billsLink = document.getElementById("bills-toggle");
 	var showForm = document.getElementById("show-form");
 	var showLink = document.getElementById("show-toggle");
 
@@ -381,16 +400,26 @@ foreach ($family_birthdays as $family_birthday) {
 	showLink.addEventListener("click", function() {
 		toggleForm("show");
 	});
+	billsLink.addEventListener("click", function() {
+		toggleForm("bills");
+	});
 
 
 	function toggleForm(form) {
 		if (form == "add") {
 			addForm.style.display = "block";
 			showForm.style.display = "none";
+			billsForm.style.display = "none";
 
 		} else if (form == "show") {
 			addForm.style.display = "none";
 			showForm.style.display = "block";
+			billsForm.style.display = "none";
+
+		}else if (form == "bills") {
+			addForm.style.display = "none";
+			showForm.style.display = "none";
+			billsForm.style.display = "block";
 
 		}
 	}

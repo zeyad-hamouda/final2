@@ -333,16 +333,17 @@ foreach ($family_birthdays as $family_birthday) {
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100px;
+		width: 200px;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 		background-color: #333;
 		height: 100vh;
 		color: white;
 		padding-top: 20px;
 		transition: width 0.5s ease;
 		z-index: 1;
+		
 	}
 
 	nav a {
@@ -352,6 +353,7 @@ foreach ($family_birthdays as $family_birthday) {
 		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
+
 	}
 
 	nav a:hover {
@@ -363,7 +365,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 5px;
+		padding: 10px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -376,7 +378,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 5px;
+		padding: 10px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -388,7 +390,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 5px;
+		padding: 10px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -400,7 +402,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 5px;
+		padding: 10px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -414,7 +416,15 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 5px;
+		padding: 10px;
+		border-radius: 5px;
+		transition: background-color 0.3s ease;
+	}
+	.display-link{
+		color: white;
+		text-decoration: none;
+		margin-top: 10px;
+		padding: 10px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -428,7 +438,15 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 5px;
+		padding: 10px;
+		border-radius: 5px;
+		transition: background-color 0.3s ease;
+	}
+	.logout-link{
+		color: white;
+		text-decoration: none;
+		margin-top: 10px;
+		padding: 10px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -441,7 +459,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 5px;
+		padding: 10px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -476,6 +494,7 @@ foreach ($family_birthdays as $family_birthday) {
 		input[type=text], 
 		input[type=password], 
 		input[type=number], 
+		input[type=email],
 		input[type=date] {
 			width: 95%;
 			padding: 10px;
@@ -535,7 +554,6 @@ foreach ($family_birthdays as $family_birthday) {
 	}
 
 	#add-form {
-			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-items: center; 
@@ -544,7 +562,7 @@ foreach ($family_birthdays as $family_birthday) {
 			border-radius: 10px;
 			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 			width: 100%;
-			margin-bottom: 30px;
+			margin: 0 auto;
 			display: none;
 		}
 
@@ -554,7 +572,6 @@ foreach ($family_birthdays as $family_birthday) {
 			border-radius: 10px;
 			max-width: 900px;
 			margin: 0 auto;
-			display: block;
 			align-items: center; 
 			justify-content: center; 
 			display: none;
@@ -577,6 +594,7 @@ foreach ($family_birthdays as $family_birthday) {
 			text-align: center;
 			border: 1px solid black;
 			background-color: #f2f2f2;
+			justify-content: center;
 			color: #333;
 			}
 
@@ -588,8 +606,8 @@ foreach ($family_birthdays as $family_birthday) {
 
 			td:first-child {font-weight: bold;}
 
-			form button {
-			background-color: #4CAF50;
+			.edit-button {
+			background-color: #000080;
 			border: none;
 			color: white;
 			padding: 10px 20px;
@@ -600,53 +618,95 @@ foreach ($family_birthdays as $family_birthday) {
 			cursor: pointer;
 			}
 
-			form button:hover {background-color: #3e8e41;}
+			.edit-button:hover {
+				background-color: #4169E1;
+				color: #000000;
+			}
+
+			.delete-button {
+			position: relative;
+			background-color: #000080;
+			border: none;
+			color: white;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			margin: 4px 2px;
+			cursor: pointer;
+			}
+
+			.delete-button:hover {
+				background-color: #4169E1;
+				color: #000000;
+			}
 
 	#bills-form{
-		display: none;
+		flex-direction: column;
+			align-items: center;
+			justify-items: center; 
+			background-color: #DCDCDC;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			width: 100%;
+			margin: 0 auto;
+			display: none;
 	}
 	#deposit-form{
-		display:none;
+		flex-direction: column;
+			align-items: center;
+			justify-items: center; 
+			background-color: #DCDCDC;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			width: 100%;
+			margin: 0 auto;
+			display: none;
 	}
 	#withdraw-form{
-		display:none;
+		flex-direction: column;
+			align-items: center;
+			justify-items: center; 
+			background-color: #DCDCDC;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			width: 100%;
+			margin: 0 auto;
+			display: none;
 	}
 	#statement-form{
-		display:none;
+		flex-direction: column;
+			align-items: center;
+			justify-items: center; 
+			background-color: #DCDCDC;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			width: 100%;
+			margin: 0 auto;
+			display: none;
 	}
 	#settings-form{
-		display:none;
-	}
-
-	@media (max-width: 767px) {
-		.navbar {
-			width: 50px;
-		}
-
-		.navbar a {
-			display: none;
-		}
-
-		.navbar:hover a {
-			display: block;
-		}
-
-		#add-toggle, #show-toggle, #bills-toggle {
-			display: block;
+		flex-direction: column;
+			align-items: center;
+			justify-items: center; 
+			background-color: #DCDCDC;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 			width: 100%;
-			text-align: center;
-		}
-
-		#add-toggle:hover, #show-toggle:hover, #bills-toggle:hover {
-			background-color: #555;
-			cursor: pointer;
-		}
+			margin: 0 auto;
+			display: none;
 	}
+
 	</style>
 	</head>
 	<body>
 	<nav class="navbar">
-		<h3>Welcome <?php echo $first_name; ?></h3>
+		<h3 class = "display-link">Welcome <?php echo $first_name; ?></h3>
 		<p class="add-link" id="add-toggle">Add Family Members</p>
 		<p class="show-link" id="show-toggle">Show Family Members</p>
 		<p class="bills-link" id="bills-toggle">Pay Bills</p>
@@ -654,7 +714,7 @@ foreach ($family_birthdays as $family_birthday) {
 		<p class="withdraw-link" id="withdraw-toggle">Withdraw</p>
 		<p class="statement-link" id="statement-toggle">Statement</p>
 		<p class="settings-link" id="settings-toggle">Account Settings</p>
-		<a href="logout.php">Logout</a>
+		<a href="logout.php" class ="logout-link">Logout</a>
 	</nav>
 	<div class="container">
 		
@@ -684,58 +744,65 @@ foreach ($family_birthdays as $family_birthday) {
 			<div class="success"><?php echo $success; ?></div>
 		<?php endif; ?>
 		<form id="show-form">
-    		<h1>Family members</h1>
-			<?php
-            	// Retrieve the user's family members from the database
-            	$stmt = $db->prepare("SELECT id, username, firstname, lastname, number, dob, is_sub_user FROM users WHERE parent_id = :id");
-            	$stmt->bindValue(":id", $_SESSION["user_id"]);
-            	$stmt->execute();
-            	$family_members = $stmt->fetchAll();
-				if(empty($family_members)){
-					echo "You currently do not have any family members added";
-				} else{
-            		foreach ($family_members as $family_member) {
-                		$name = $family_member["firstname"] . " " . $family_member["lastname"];
-                		$privilege = $family_member["is_sub_user"] ? "Sub user" : "Main user";
-				}
-            	?>
-    		<table>
-        		<thead>
-            	<tr>
-                	<th>Username</th>
-                	<th>Name</th>
-                	<th>Phone Number</th>
-                	<th>Date of birth</th>
-                	<th>Privilege</th>
-                	<th>Edit</th>
-                	<th>Delete</th>
-            	</tr>
-        		</thead>
-        	<tbody>
-            	
-            	<tr>
-                	<td><?php echo $family_member["username"]; ?></td>
-                	<td><?php echo $name; ?></td>
-                	<td><?php echo $family_member["number"]; ?></td>
-                	<td><?php echo $family_member["dob"]; ?></td>
-                	<td><?php echo $privilege; ?></td>
-                	<td>
-                    	<form method="post">
-                        	<input type="hidden" name="id" value="<?php echo $family_member['id']; ?>">
-                        	<button type="submit" name="edit_family_member_<?php echo $family_member['id']; ?>">Edit</button>
-                    	</form>
-                	</td>
-                	<td>
-                    	<form method="post">
-                        	<input type="hidden" name="id" value="<?php echo $family_member['id']; ?>">
-                        	<button type="submit" name="delete_family_member">Delete</button>
-                    	</form>
-                	</td>
-            	</tr>
-            	<?php } ?>
-        	</tbody>
-    		</table>
-		</form>
+    <h1>Family members</h1>
+    <?php
+    // Retrieve the user's family members from the database
+    $stmt = $db->prepare("SELECT id, username, firstname, lastname, number, dob, is_sub_user FROM users WHERE parent_id = :id");
+    $stmt->bindValue(":id", $_SESSION["user_id"]);
+    $stmt->execute();
+    $family_members = $stmt->fetchAll();
+    if (empty($family_members)) {
+        echo "You currently do not have any family members added";
+    } else {
+        ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Date of birth</th>
+                    <th>Privilege</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ($family_members as $family_member) {
+                $name = $family_member["firstname"] . " " . $family_member["lastname"];
+                $privilege = $family_member["is_sub_user"] ? "Sub user" : "Main user";
+                ?>
+                <tr>
+                    <td><?php echo $family_member["username"]; ?></td>
+                    <td><?php echo $name; ?></td>
+                    <td><?php echo $family_member["number"]; ?></td>
+                    <td><?php echo $family_member["dob"]; ?></td>
+                    <td><?php echo $privilege; ?></td>
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="id" value="<?php echo $family_member['id']; ?>">
+                            <button type="submit" class ="edit-button" name="edit_family_member_<?php echo $family_member['id']; ?>">Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="id" value="<?php echo $family_member['id']; ?>">
+                            <button type="submit" class ="delete-button" name="delete_family_member">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php
+            } // close foreach loop
+            ?>
+            </tbody>
+        </table>
+    <?php
+    }
+    ?>
+</form>
+
+</form> 
 		<form id="edit-form" method="post" style="display:none;">
     		<input type="hidden" name="id" id="edit-id">
     		<label for="edit-username">Username:</label>

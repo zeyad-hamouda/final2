@@ -6,6 +6,7 @@ if (!isset($_SESSION["user_id"])) {
 }
 
 require_once "db_init.php";
+include 'birthday_alert.php';
 
 // Retrieve the user's information from the database
 $stmt = $db->prepare("SELECT username, email, dob FROM users WHERE id = :id");
@@ -86,6 +87,7 @@ if (isset($_POST["pay_bill"])) {
 		$message = implode("<br>", $errors);
 	}
 }
+
 // Process the deposit form submission
 if (isset($_POST["deposit_submit"])) {
     // Retrieve the form data
@@ -127,6 +129,51 @@ if (isset($_POST["deposit_submit"])) {
         $stmt->execute();
 
         header("Location: deposit_confirmation.php?amount=$amount&username=$first_name");
+        exit();
+    } else {
+        $message = implode("<br>", $errors);
+    }
+}
+if (isset($_POST["withdraw_submit"])) {
+    // Retrieve the form data
+    $amount = $_POST["withdraw"];
+    $date = $_POST["withdraw_date"];
+
+    // Validate the form data
+    $errors = [];
+    if (!is_numeric($amount) || $amount <= 0) {
+        $errors[] = "Please enter a valid amount.";
+    }
+
+    if (empty($date)) {
+        $errors[] = "Please select a date.";
+    }
+
+    // If there are no errors, update the database with the deposit details and balance
+    if (empty($errors)) {
+        // Retrieve the user's current balance from the database
+        $stmt = $db->prepare("SELECT balance FROM users WHERE id = :user_id");
+        $stmt->bindValue(":user_id", $_SESSION["user_id"]);
+        $stmt->execute();
+        $balance = $stmt->fetchColumn();
+
+        // Add the deposit amount to the user's balance
+        $new_balance = $balance - $amount;
+
+        // Update the user's balance in the database with the new balance
+        $stmt = $db->prepare("UPDATE users SET balance = :new_balance WHERE id = :user_id");
+        $stmt->bindValue(":new_balance", $new_balance);
+        $stmt->bindValue(":user_id", $_SESSION["user_id"]);
+        $stmt->execute();
+
+        // Insert the deposit details into the database
+        $stmt = $db->prepare("INSERT INTO withdraw (user_id, amount, date) VALUES (:user_id, :amount, :date)");
+        $stmt->bindValue(":user_id", $_SESSION["user_id"]);
+        $stmt->bindValue(":amount", $amount);
+        $stmt->bindValue(":date", $date);
+        $stmt->execute();
+
+        header("Location: withdraw_confirmation.php?amount=$amount&username=$first_name");
         exit();
     } else {
         $message = implode("<br>", $errors);
@@ -194,53 +241,6 @@ $stmt->bindValue(":user_id", $_SESSION["user_id"]);
 $stmt->execute();
 $bill_payments = $stmt->fetchAll();
 
-// Process the withdrawal form submission
-if (isset($_POST["withdraw_submit"])) {
-    // Retrieve the form data
-    $amount = $_POST["withdraw"];
-    $date = $_POST["withdraw_date"];
-
-    // Validate the form data
-    $errors = [];
-    if (!is_numeric($amount) || $amount <= 0) {
-        $errors[] = "Please enter a valid amount.";
-    }
-
-    if (empty($date)) {
-        $errors[] = "Please select a date.";
-    }
-
-    // If there are no errors, update the database with the deposit details and balance
-    if (empty($errors)) {
-        // Retrieve the user's current balance from the database
-        $stmt = $db->prepare("SELECT balance FROM users WHERE id = :user_id");
-        $stmt->bindValue(":user_id", $_SESSION["user_id"]);
-        $stmt->execute();
-        $balance = $stmt->fetchColumn();
-
-        // Subtract the withdrawal amount to the user's balance
-        $new_balance = $balance - $amount;
-
-        // Update the user's balance in the database with the new balance
-        $stmt = $db->prepare("UPDATE users SET balance = :new_balance WHERE id = :user_id");
-        $stmt->bindValue(":new_balance", $new_balance);
-        $stmt->bindValue(":user_id", $_SESSION["user_id"]);
-        $stmt->execute();
-
-        // Insert the deposit details into the database
-        $stmt = $db->prepare("INSERT INTO withdraw (user_id, amount, date) VALUES (:user_id, :amount, :date)");
-        $stmt->bindValue(":user_id", $_SESSION["user_id"]);
-        $stmt->bindValue(":amount", $amount);
-        $stmt->bindValue(":date", $date);
-        $stmt->execute();
-
-        header("Location: withdraw_confirmation.php?amount=$amount&username=$first_name");
-        exit();
-    } else {
-        $message = implode("<br>", $errors);
-    }
-}
-
 
 if (isset($_POST["add_family_member"])) {
     // Sanitize user input
@@ -302,26 +302,6 @@ if (isset($_POST["delete_family_member"])) {
     $success = "Family member deleted successfully";
 }
 
-
-// Get the upcoming family birthdays
-$family_birthday_stmt = $db->prepare("SELECT firstname, lastname, dob FROM users WHERE DATE(dob) >= DATE('now') AND DATE(dob) <= DATE('now', '+2 day') AND parent_id = :id AND is_sub_user = 1 AND notification_sent = '0'");
-$family_birthday_stmt->bindValue(":id", $_SESSION["user_id"]);
-$family_birthday_stmt->execute();
-$family_birthdays = $family_birthday_stmt->fetchAll();
-
-foreach ($family_birthdays as $family_birthday) {
-    $message = "Upcoming birthday: " . $family_birthday["firstname"] . " " . $family_birthday["lastname"] . " on " . $family_birthday["dob"];
-    echo "<script>alert('$message');</script>";
-    
-    // Set notification_sent to 1 to avoid duplicate notifications
-    $update_stmt = $db->prepare("UPDATE users SET notification_sent = '1' WHERE firstname = :firstname AND lastname = :lastname AND dob = :dob");
-    $update_stmt->bindValue(":firstname", $family_birthday["firstname"]);
-    $update_stmt->bindValue(":lastname", $family_birthday["lastname"]);
-    $update_stmt->bindValue(":dob", $family_birthday["dob"]);
-    $update_stmt->execute();
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -365,7 +345,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -378,7 +358,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -390,7 +370,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -402,7 +382,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -416,7 +396,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -424,7 +404,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -438,15 +418,23 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
 	.logout-link{
 		color: white;
 		text-decoration: none;
+		margin-top: 15px;
+		padding: 5px;
+		border-radius: 5px;
+		transition: background-color 0.3s ease;
+	}
+	.debit-link{
+		color: white;
+		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -459,7 +447,7 @@ foreach ($family_birthdays as $family_birthday) {
 		color: white;
 		text-decoration: none;
 		margin-top: 10px;
-		padding: 10px;
+		padding: 5px;
 		border-radius: 5px;
 		transition: background-color 0.3s ease;
 	}
@@ -714,6 +702,7 @@ foreach ($family_birthdays as $family_birthday) {
 		<p class="withdraw-link" id="withdraw-toggle">Withdraw</p>
 		<p class="statement-link" id="statement-toggle">Statement</p>
 		<p class="settings-link" id="settings-toggle">Account Settings</p>
+		<a href="add_debit.php" class="debit-link">Add Debit</a>
 		<a href="logout.php" class ="logout-link">Logout</a>
 	</nav>
 	<div class="container">
@@ -869,6 +858,16 @@ foreach ($family_birthdays as $family_birthday) {
     	</form>
 		<form id="statement-form">
   <h1>Bank Statement</h1>
+  
+  <?php
+  // Get the user's current balance
+  $stmt = $db->prepare("SELECT balance FROM users WHERE id = ?");
+  $stmt->execute([$_SESSION["user_id"]]);
+  $balance = $stmt->fetchColumn();
+  ?>
+  
+  <p>Current Balance: <?php echo $balance; ?></p>
+  
   <?php
   $stmt = $db->prepare("SELECT date, 'Deposit' as type, amount, 'Deposit to Account' as description FROM deposits WHERE user_id = :user_id 
                         UNION ALL 
@@ -879,6 +878,7 @@ foreach ($family_birthdays as $family_birthday) {
   $stmt->execute();
   $transactions = $stmt->fetchAll();
   ?>
+  
   <?php if (empty($transactions)): ?>
     <p>There are no transactions made yet</p>
   <?php else: ?>

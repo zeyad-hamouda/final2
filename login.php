@@ -3,18 +3,29 @@
 <html>
 <head>
 	<title>Login and Registration</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 	<style>
 		body {
-			font-family: Arial, sans-serif;
+			font-family: 'Poppins', sans-serif;
+			display: flex; 
+			justify-content: center; 
+			align-items: center; 
+			min-height: 100vh;
+			background-color: #F0F8FF;
 		}
 
 		form {
-			background-color: #f2f2f2;
+			background-color: #DCDCDC;
 			padding: 20px;
 			border-radius: 10px;
-			max-width: 500px;
+			max-width: 900px;
 			margin: 0 auto;
 			display: block;
+			font-size: 32px; 
 		}
 
 		input[type="text"],
@@ -41,7 +52,7 @@
 		}
 
 		input[type="submit"] {
-			background-color: #4CAF50;
+			background-color: #000080;
 			color: white;
 			padding: 12px 20px;
 			border: none;
@@ -50,18 +61,22 @@
 			font-size: 16px;
 			margin-top: 10px;
 			width: 100%;
-			transition: background-color 0.3s ease;
+			transition: 0.3s ease;
+			font-size: 20px; 
 		}
 
 		input[type="submit"]:hover {
-			background-color: #3e8e41;
+			background-color: #4169E1;
+			color: white;
 		}
 
 		.error {
 			color: red;
 			margin-bottom: 10px;
+			font-size: 18px; 
 		}
 
+		/*mini blue text */
 		.login-link{
 			text-align: center;
 			margin-top: 20px;
@@ -95,6 +110,7 @@
 			text-decoration: underline;
 		}
 
+	
 		#register-form {
 			display: none;
 		}

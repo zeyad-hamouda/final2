@@ -11,10 +11,10 @@ $db->exec("CREATE TABLE IF NOT EXISTS users (
     password TEXT,
     dob TEXT,
     token TEXT,
-    notification_sent INTEGER,
+    notification_sent INTEGER DEFAULT 0,
     is_sub_user INTEGER DEFAULT 0,
     parent_id INTEGER DEFAULT 0,
-    balance	FLOAT
+    balance	DECIMAL
 )");
 
 $db->exec("CREATE TABLE IF NOT EXISTS debits (
